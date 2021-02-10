@@ -24,20 +24,19 @@ function App() {
   });
 
   const drag = (event: any) => {
-    console.log(event)
     setDraggable(event);
   };
 
   const drop = (event: any) => {
+    if(event.type === draggable.type || event.type !== TableEnum.Drop) {
+      return;
+    }
     const object: TableInterface = getDraggableObject(
       draggable.index,
       draggable.type
     );
     object.isDroped = true;
 
-    // console.log(commonDragTableData);
-    console.log(draggable);
-    // console.log(event);
     if (event.type === TableEnum.Drop) {
       const data = dropTableData;
       data.splice(event.index, 0, object);

@@ -17,7 +17,7 @@ const Row = ({ item, index, type, drag, drop }: IRowType) => {
 
   return (
     <tr
-      draggable={type !== TableEnum.Drop}
+      draggable={type !== TableEnum.Drop && !item?.isDroped}
       onDragStart={(event) => drag({ index, type })}
       onDrop={(event) => drop({ index, type })}
       onDragOver={(event) => dragOver(event)}
