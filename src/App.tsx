@@ -8,6 +8,8 @@ import {
 
 import { Table as TableEnum } from "./shared/enums/table";
 import { Table as TableInterface } from "./shared/interface/table";
+import { useDispatch, useSelector } from "react-redux";
+import { setTableData } from "./redux/actions/Table";
 
 function App() {
   const [headers] = useState(["ID", "Name", "User name", "Email", "Address"]);
@@ -28,7 +30,7 @@ function App() {
   };
 
   const drop = (event: any) => {
-    if(event.type === draggable.type || event.type !== TableEnum.Drop) {
+    if (event.type === draggable.type || event.type !== TableEnum.Drop) {
       return;
     }
     const object: TableInterface = getDraggableObject(
@@ -62,6 +64,13 @@ function App() {
       : setMasterDragTableData([...data]);
     return object;
   };
+
+  // Fetch updated data from redux
+  const tableData = useSelector((state: any) => state.Table?.tableData);
+
+  // Dispatch updated data to set in redux store
+  const dispatch = useDispatch();
+  dispatch(setTableData({}));
 
   return (
     <div className="container">
