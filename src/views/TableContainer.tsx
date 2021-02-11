@@ -42,7 +42,7 @@ function TableContainer() {
 
   /**
    * Used to set drag object
-   * @param event 
+   * @param event
    */
   const drag = (event: Draggable) => {
     setDraggable(event);
@@ -50,8 +50,8 @@ function TableContainer() {
 
   /**
    * Used to get draggable object
-   * @param dragObj 
-   * @param dropObj 
+   * @param dragObj
+   * @param dropObj
    */
   const getDraggableObject = (dragObj: Draggable, dropObj: Draggable) => {
     const list =
@@ -73,31 +73,36 @@ function TableContainer() {
 
   /**
    * Used to set drop object
-   * @param dropObject 
+   * @param dropObject
    */
   const drop = (dropObject: Draggable) => {
     setDraggable(getDummyDraggableValue);
-    if (
-      !(
-        dropObject.type === draggable.type || dropObject.type === TableEnum.Drop
-      )
-    ) {
+    if (!(dropObject.type === draggable.type || dropObject.type === TableEnum.Drop)) {
       return;
     }
     const object: TableInterface = getDraggableObject(draggable, dropObject);
-    object.isDroped = true;
-    if (dropObject.type === TableEnum.Drop) {
-      const data = dropTableList;
-      data.splice(dropObject.index, 0, object);
-      dispatch(setTableData({ dropTableList: [...data] }));
-    } else if (dropObject.type === TableEnum.CommonDrag) {
-      const data = commonDragTableList;
-      data.splice(dropObject.index, 0, object);
-      dispatch(setTableData({ commonDragTableList: [...data] }));
-    } else if (dropObject.type === TableEnum.MasterDrag) {
-      const data = masterDragTableList;
-      data.splice(dropObject.index, 0, object);
-      dispatch(setTableData({ masterDragTableList: [...data] }));
+    object.isDroped = !(
+      dropObject.index === draggable.index && dropObject.type === draggable.type
+    );
+    switch (dropObject.type) {
+      case TableEnum.Drop: {
+        const data = dropTableList;
+        data.splice(dropObject.index, 0, object);
+        dispatch(setTableData({ dropTableList: [...data] }));
+        break;
+      }
+      case TableEnum.CommonDrag: {
+        const data = commonDragTableList;
+        data.splice(dropObject.index, 0, object);
+        dispatch(setTableData({ commonDragTableList: [...data] }));
+        break;
+      }
+      case TableEnum.CommonDrag: {
+        const data = masterDragTableList;
+        data.splice(dropObject.index, 0, object);
+        dispatch(setTableData({ masterDragTableList: [...data] }));
+        break;
+      }
     }
   };
 
