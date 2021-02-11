@@ -1,13 +1,25 @@
 import { SET_TABLE_DATA } from "../actions/Types";
 
-const initialState = {};
+// mocks
+import {
+  DropTableMockData,
+  CommonDragTableMockData,
+  MasterDragTableMockData,
+} from "../../shared/mocks";
+
+const initialState = {
+  commonHeaders: ["ID", "Name", "User name", "Email", "Address"],
+  dropTableList: DropTableMockData,
+  commonDragTableList: CommonDragTableMockData,
+  masterDragTableList: MasterDragTableMockData,
+};
 
 export default function Table(state = initialState, action: any) {
   switch (action.type) {
     case SET_TABLE_DATA:
       return {
         ...state,
-        payload: action.payload.table,
+        ...action.payload,
       };
     default:
       return state;

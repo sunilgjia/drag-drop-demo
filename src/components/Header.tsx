@@ -1,4 +1,8 @@
-const Header = ({ headers }: any) => {
+interface IHeaderType {
+  headers: string[];
+}
+
+const Header = ({ headers }: IHeaderType) => {
   return (
     <thead>
       <tr>

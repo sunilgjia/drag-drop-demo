@@ -1,5 +1,5 @@
 export enum Table {
     Drop = "DROP",
-    CommonDrag = "COMMONDRAG",
-    MasterDrag = "MASTERDRAG"
+    CommonDrag = "COMMON_DRAG",
+    MasterDrag = "MASTER_DRAG"
 }

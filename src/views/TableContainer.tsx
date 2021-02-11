@@ -11,22 +11,20 @@ import { setTableData } from "../redux/actions/Table";
 import { Table as TableEnum } from "../shared/enums/Table";
 import { Table as TableInterface } from "../shared/interface/Table";
 
-// mock data
-import {
-  CommonDragTableMockData,
-  DropTableMockData,
-  MasterDragTableMockData,
-} from "../shared/mocks";
-
 function TableContainer() {
-  const [headers] = useState(["ID", "Name", "User name", "Email", "Address"]);
-  const [dropTableData, setDopTableData] = useState(DropTableMockData);
-  const [commonDragTableData, setCommonDragTableData] = useState(
-    CommonDragTableMockData
+  // Fetch updated data from redux
+  const commonHeaders = useSelector((state: any) => state.Table.commonHeaders);
+  const dropTableList = useSelector((state: any) => state.Table.dropTableList);
+  const commonDragTableList = useSelector(
+    (state: any) => state.Table.commonDragTableList
   );
-  const [masterDragTableData, setMasterDragTableData] = useState(
-    MasterDragTableMockData
+  const masterDragTableList = useSelector(
+    (state: any) => state.Table.masterDragTableList
   );
+
+  // Dispatch updated data to set in redux store
+  const dispatch = useDispatch();
+
   const [draggable, setDraggable] = useState({
     index: 0,
     type: TableEnum.CommonDrag,
@@ -36,6 +34,16 @@ function TableContainer() {
     setDraggable(event);
   };
 
+  const getDraggableObject = (index: number, type: TableEnum) => {
+    const data =
+      type === TableEnum.CommonDrag ? commonDragTableList : masterDragTableList;
+    const object = data[index];
+    data.splice(index, 1);
+    type === TableEnum.CommonDrag
+      ? dispatch(setTableData({ commonDragTableList: [...data] }))
+      : dispatch(setTableData({ masterDragTableList: [...data] }));
+    return object;
+  };
   const drop = (event: any) => {
     if (event.type === draggable.type || event.type !== TableEnum.Drop) {
       return;
@@ -47,37 +55,19 @@ function TableContainer() {
     object.isDroped = true;
 
     if (event.type === TableEnum.Drop) {
-      const data = dropTableData;
+      const data = dropTableList;
       data.splice(event.index, 0, object);
-      setDopTableData([...data]);
+      dispatch(setTableData({ dropTableList: [...data] }));
     } else if (event.type === TableEnum.CommonDrag) {
-      const data = commonDragTableData;
+      const data = commonDragTableList;
       data.splice(event.index, 0, object);
-      setCommonDragTableData([...data]);
+      dispatch(setTableData({ commonDragTableList: [...data] }));
     } else if (event.type === TableEnum.MasterDrag) {
-      const data = masterDragTableData;
+      const data = masterDragTableList;
       data.splice(event.index, 0, object);
-      setMasterDragTableData([...data]);
+      dispatch(setTableData({ masterDragTableList: [...data] }));
     }
   };
-
-  const getDraggableObject = (index: number, type: TableEnum) => {
-    const data =
-      type === TableEnum.CommonDrag ? commonDragTableData : masterDragTableData;
-    const object = data[index];
-    data.splice(index, 1);
-    type === TableEnum.CommonDrag
-      ? setCommonDragTableData([...data])
-      : setMasterDragTableData([...data]);
-    return object;
-  };
-
-  // Fetch updated data from redux
-  const tableData = useSelector((state: any) => state.Table?.tableData);
-
-  // Dispatch updated data to set in redux store
-  const dispatch = useDispatch();
-  dispatch(setTableData({}));
 
   return (
     <div className="container">
@@ -86,24 +76,24 @@ function TableContainer() {
           <Table
             title="Drop table"
             type={TableEnum.Drop}
-            headers={headers}
-            data={dropTableData}
+            headers={commonHeaders}
+            data={dropTableList}
             drag={drag}
             drop={drop}
           />
           <Table
             title="Common Drag table"
             type={TableEnum.CommonDrag}
-            headers={headers}
-            data={commonDragTableData}
+            headers={commonHeaders}
+            data={commonDragTableList}
             drag={drag}
             drop={drop}
           />
           <Table
             title="Master drag table"
             type={TableEnum.MasterDrag}
-            headers={headers}
-            data={masterDragTableData}
+            headers={commonHeaders}
+            data={masterDragTableList}
             drag={drag}
             drop={drop}
           />
