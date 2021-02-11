@@ -2,17 +2,18 @@ import React from "react";
 
 // interface & enum
 import { Table as TableEnum } from "../shared/enums";
-import { Table } from "../shared/interface";
+import { Draggable, Table } from "../shared/interface";
 
 interface IRowType {
   item: Table;
   index: number;
   type: TableEnum;
+  draggable: Draggable;
   drag: any;
   drop: any;
 }
 
-const Row = ({ item, index, type, drag, drop }: IRowType) => {
+const Row = ({ item, index, type, draggable, drag, drop }: IRowType) => {
   const dragOver = (event: any) => {
     event.preventDefault();
   };
@@ -20,10 +21,10 @@ const Row = ({ item, index, type, drag, drop }: IRowType) => {
   return (
     <tr
       draggable={type !== TableEnum.Drop && !item?.isDroped}
-      onDragStart={(event) => drag({ index, type })}
-      onDrop={(event) => drop({ index, type })}
+      onDragStart={() => drag({ index, type })}
+      onDrop={() => drop({ index, type })}
       onDragOver={(event) => dragOver(event)}
-      className={item?.isDroped ? "table-active" : ""}
+      className={(item?.isDroped ? "table-active" : "") + (draggable.type === type && draggable.index === index ? " table-success" : "")}
     >
       <td>{item.id}</td>
       <td>{item.name}</td>

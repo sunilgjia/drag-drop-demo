@@ -1,5 +1,5 @@
 import React from "react";
-import { Table as TableInterface } from "../shared/interface";
+import { Draggable, Table as TableInterface } from "../shared/interface";
 
 // components
 import Body from "./Body";
@@ -13,17 +13,18 @@ interface ITableType {
   type: TableEnum;
   headers: string[];
   data: TableInterface[];
+  draggable: Draggable;
   drag: any;
   drop: any;
 }
 
-const Table = ({ title, type, data, headers, drag, drop }: ITableType) => {
+const Table = ({ title, type, data, headers, draggable, drag, drop }: ITableType) => {
   return (
     <div className="table-responsive">
       <h2>{title}</h2>
       <table className="table">
         <Header headers={headers} />
-        <Body data={data} type={type} drag={drag} drop={drop} />
+        <Body data={data} type={type} draggable={draggable} drag={drag} drop={drop} />
       </table>
     </div>
   );

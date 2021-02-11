@@ -5,7 +5,7 @@ interface IHeaderType {
 const Header = ({ headers }: IHeaderType) => {
   return (
     <thead>
-      <tr>
+      <tr className="table-secondary">
         {headers.map((header: string, index: number) => {
           return (
             <th scope="col" key={index}>

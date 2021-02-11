@@ -9,6 +9,7 @@ import { setTableData } from "../redux/actions/Table";
 
 // interface & enums
 import { Table as TableEnum } from "../shared/enums/Table";
+import { Draggable } from "../shared/interface";
 import { Table as TableInterface } from "../shared/interface/Table";
 
 function TableContainer() {
@@ -25,46 +26,60 @@ function TableContainer() {
   // Dispatch updated data to set in redux store
   const dispatch = useDispatch();
 
-  const [draggable, setDraggable] = useState({
-    index: 0,
-    type: TableEnum.CommonDrag,
-  });
+  const getDummyDraggableValue = (): Draggable => {
+    return {
+      index: -1,
+      type: TableEnum.Drop,
+    };
+  };
 
-  const drag = (event: any) => {
+  const [draggable, setDraggable] = useState<Draggable>(
+    getDummyDraggableValue()
+  );
+
+  const drag = (event: Draggable) => {
     setDraggable(event);
   };
 
-  const getDraggableObject = (index: number, type: TableEnum) => {
-    const data =
-      type === TableEnum.CommonDrag ? commonDragTableList : masterDragTableList;
-    const object = data[index];
-    data.splice(index, 1);
-    type === TableEnum.CommonDrag
-      ? dispatch(setTableData({ commonDragTableList: [...data] }))
-      : dispatch(setTableData({ masterDragTableList: [...data] }));
+  const getDraggableObject = (dragObj: Draggable, dropObj: Draggable) => {
+    const list =
+      dragObj.type === TableEnum.CommonDrag
+        ? commonDragTableList
+        : masterDragTableList;
+
+    const object = list[dragObj.index];
+    if (dropObj.type !== TableEnum.Drop) {
+      list.splice(dragObj.index, 1);
+    } else {
+      list[dragObj.index].isDroped = true;
+    }
+    dragObj.type === TableEnum.CommonDrag
+      ? dispatch(setTableData({ commonDragTableList: [...list] }))
+      : dispatch(setTableData({ masterDragTableList: [...list] }));
     return object;
   };
-  const drop = (event: any) => {
-    if (event.type === draggable.type || event.type !== TableEnum.Drop) {
+  const drop = (dropObject: Draggable) => {
+    setDraggable(getDummyDraggableValue);
+    if (
+      !(
+        dropObject.type === draggable.type || dropObject.type === TableEnum.Drop
+      )
+    ) {
       return;
     }
-    const object: TableInterface = getDraggableObject(
-      draggable.index,
-      draggable.type
-    );
+    const object: TableInterface = getDraggableObject(draggable, dropObject);
     object.isDroped = true;
-
-    if (event.type === TableEnum.Drop) {
+    if (dropObject.type === TableEnum.Drop) {
       const data = dropTableList;
-      data.splice(event.index, 0, object);
+      data.splice(dropObject.index, 0, object);
       dispatch(setTableData({ dropTableList: [...data] }));
-    } else if (event.type === TableEnum.CommonDrag) {
+    } else if (dropObject.type === TableEnum.CommonDrag) {
       const data = commonDragTableList;
-      data.splice(event.index, 0, object);
+      data.splice(dropObject.index, 0, object);
       dispatch(setTableData({ commonDragTableList: [...data] }));
-    } else if (event.type === TableEnum.MasterDrag) {
+    } else if (dropObject.type === TableEnum.MasterDrag) {
       const data = masterDragTableList;
-      data.splice(event.index, 0, object);
+      data.splice(dropObject.index, 0, object);
       dispatch(setTableData({ masterDragTableList: [...data] }));
     }
   };
@@ -78,6 +93,7 @@ function TableContainer() {
             type={TableEnum.Drop}
             headers={commonHeaders}
             data={dropTableList}
+            draggable={draggable}
             drag={drag}
             drop={drop}
           />
@@ -86,6 +102,7 @@ function TableContainer() {
             type={TableEnum.CommonDrag}
             headers={commonHeaders}
             data={commonDragTableList}
+            draggable={draggable}
             drag={drag}
             drop={drop}
           />
@@ -94,6 +111,7 @@ function TableContainer() {
             type={TableEnum.MasterDrag}
             headers={commonHeaders}
             data={masterDragTableList}
+            draggable={draggable}
             drag={drag}
             drop={drop}
           />

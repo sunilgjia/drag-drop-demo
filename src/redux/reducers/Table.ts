@@ -8,7 +8,7 @@ import {
 } from "../../shared/mocks";
 
 const initialState = {
-  commonHeaders: ["ID", "Name", "User name", "Email", "Address"],
+  commonHeaders: ["#", "Name", "User name", "Email", "Address"],
   dropTableList: DropTableMockData,
   commonDragTableList: CommonDragTableMockData,
   masterDragTableList: MasterDragTableMockData,
