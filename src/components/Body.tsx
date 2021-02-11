@@ -1,6 +1,10 @@
 import React from "react";
+
+// interface & enum
+import { Table as TableEnum } from "../shared/enums";
+
+// components
 import Row from "./Row";
-import { Table as TableEnum } from "../shared/enums/table";
 
 interface IBodyType {
   data: any[];
@@ -13,7 +17,16 @@ const Body = ({ data, type, drag, drop }: IBodyType) => {
   return (
     <tbody>
       {data.map((item, index) => {
-        return <Row item={item} key={index} index={index} type={type} drag={drag} drop={drop} />;
+        return (
+          <Row
+            item={item}
+            key={index}
+            index={index}
+            type={type}
+            drag={drag}
+            drop={drop}
+          />
+        );
       })}
     </tbody>
   );

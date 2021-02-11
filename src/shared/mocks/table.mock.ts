@@ -1,4 +1,4 @@
-import { Table } from "../interface/table";
+import { Table } from "../interface/Table";
 
 export const DropTableMockData: Table[] = [
   {

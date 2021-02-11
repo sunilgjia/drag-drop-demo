@@ -1,8 +1,12 @@
 import React from "react";
-import { Table as TableInterface } from "../shared/interface/table";
+import { Table as TableInterface } from "../shared/interface";
+
+// components
 import Body from "./Body";
 import Header from "./Header";
-import { Table as TableEnum } from "../shared/enums/table";
+
+// interface & enum
+import { Table as TableEnum } from "../shared/enums/Table";
 
 interface ITableType {
   title: string;
@@ -19,7 +23,7 @@ const Table = ({ title, type, data, headers, drag, drop }: ITableType) => {
       <h2>{title}</h2>
       <table className="table">
         <Header headers={headers} />
-        <Body data={data} type={type} drag={drag} drop={drop}  />
+        <Body data={data} type={type} drag={drag} drop={drop} />
       </table>
     </div>
   );

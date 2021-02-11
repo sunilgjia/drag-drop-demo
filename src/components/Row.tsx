@@ -1,6 +1,8 @@
 import React from "react";
-import { Table } from "../shared/interface/table";
-import { Table as TableEnum } from "../shared/enums/table";
+
+// interface & enum
+import { Table as TableEnum } from "../shared/enums";
+import { Table } from "../shared/interface";
 
 interface IRowType {
   item: Table;
