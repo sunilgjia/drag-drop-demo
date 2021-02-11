@@ -1,5 +1,3 @@
-import React from "react";
-
 // interface & enum
 import { Table as TableEnum } from "../shared/enums";
 import { Draggable, Table } from "../shared/interface";

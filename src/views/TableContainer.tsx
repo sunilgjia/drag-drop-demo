@@ -26,6 +26,9 @@ function TableContainer() {
   // Dispatch updated data to set in redux store
   const dispatch = useDispatch();
 
+  /**
+   * Used to get dummy draggale object
+   */
   const getDummyDraggableValue = (): Draggable => {
     return {
       index: -1,
@@ -37,10 +40,19 @@ function TableContainer() {
     getDummyDraggableValue()
   );
 
+  /**
+   * Used to set drag object
+   * @param event 
+   */
   const drag = (event: Draggable) => {
     setDraggable(event);
   };
 
+  /**
+   * Used to get draggable object
+   * @param dragObj 
+   * @param dropObj 
+   */
   const getDraggableObject = (dragObj: Draggable, dropObj: Draggable) => {
     const list =
       dragObj.type === TableEnum.CommonDrag
@@ -58,6 +70,11 @@ function TableContainer() {
       : dispatch(setTableData({ masterDragTableList: [...list] }));
     return object;
   };
+
+  /**
+   * Used to set drop object
+   * @param dropObject 
+   */
   const drop = (dropObject: Draggable) => {
     setDraggable(getDummyDraggableValue);
     if (
