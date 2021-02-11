@@ -97,7 +97,7 @@ function TableContainer() {
         dispatch(setTableData({ commonDragTableList: [...data] }));
         break;
       }
-      case TableEnum.CommonDrag: {
+      case TableEnum.MasterDrag: {
         const data = masterDragTableList;
         data.splice(dropObject.index, 0, object);
         dispatch(setTableData({ masterDragTableList: [...data] }));

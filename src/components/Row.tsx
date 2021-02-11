@@ -22,7 +22,12 @@ const Row = ({ item, index, type, draggable, drag, drop }: IRowType) => {
       onDragStart={() => drag({ index, type })}
       onDrop={() => drop({ index, type })}
       onDragOver={(event) => dragOver(event)}
-      className={(item?.isDroped ? "table-active" : "") + (draggable.type === type && draggable.index === index ? " table-success" : "")}
+      className={
+        (item?.isDroped ? "table-active not-allowed" : "") +
+        (draggable.type === type && draggable.index === index
+          ? " table-success"
+          : "")
+      }
     >
       <td>{item.id}</td>
       <td>{item.name}</td>
